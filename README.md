@@ -4,11 +4,13 @@ The high level steps to the algorithm:
 
 Given a set of N points in R^d,
 
-1) Compute all pairs of distances between two points n_i, n_j.  We will use Euclidean distance for dimension d.
+1) Compute all pairs of distances between two points n_i, n_j.  We will use Euclidean distance for dimension d (l2 norm).
 
 2) For a range of epsilons, count how many distances are less than epsilon.
 
 3) Fit a line log-log scatter plot of counts vs epsilon. The slope of this line is the estimate of Correlation Dimension.
 
+Each implementation is located in it's own directory.  The serial version was prototyped in python.  The algorithm is split into two programs.  One which computes steps 1 and 2, then outputs a simple text file. The second program plots and line fits for us.
 
-Each implementation is located in it's own directory.  The serial version was prototyped in python, then translated to C and the other implementations.
+Steps 1 and 2 were translated to C and extended to various implementations.
+
