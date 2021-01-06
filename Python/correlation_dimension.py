@@ -42,13 +42,32 @@ def correlation_integrals(D, epsilons=None, fname='correlation_integrals.dat'):
     return epsilons, C
 
 
+def fit_line(X, Y):
+
+    n = len(X)
+    assert n == len(Y)
+    xhat = np.sum(X) / n
+    yhat = np.sum(Y) / n
+
+    num = np.sum(X * Y) - n * xhat * yhat
+    den = np.sum(X * X) - n * xhat * xhat
+
+    # y = ax + b
+    a = num / den
+    b = yhat - a * xhat
+
+    return a, b
+
+
 def estimate_dimension(epsilons, C):
 
     # Fit a line
     X = np.log(epsilons)
     Y = np.log(C)
-    poly = np.poly1d(np.polyfit(X, Y, 1))
-    slope = poly[1]
+    #poly = np.poly1d(np.polyfit(X, Y, 1))
+    slope, inter = fit_line(X, Y)
+    def poly(X):
+        return slope*X + inter
     
     # Generate log-log plot, saving as a file
     plt.plot(X, Y)           # Correlation Integrals
