@@ -25,7 +25,9 @@ def correlation_integrals(D, epsilons=None, fname='correlation_integrals.dat'):
         minD = np.min(D)
         maxD = np.max(D)
         # Just ignore minD, for log(0) reasons
-        epsilons = np.linspace(minD, maxD, num=100)[1:]
+        epsilons, step = np.linspace(minD, maxD, num=100, retstep=True)
+        epsilons = epsilons[1:]
+        # print("step", step)
 
     C = np.zeros(len(epsilons), dtype=np.int)
 
@@ -48,6 +50,7 @@ def fit_line(X, Y):
     assert n == len(Y)
     xhat = np.sum(X) / n
     yhat = np.sum(Y) / n
+    # print("xhat, yhat, n", xhat, yhat, n)
 
     num = np.sum(X * Y) - n * xhat * yhat
     den = np.sum(X * X) - n * xhat * xhat
@@ -68,7 +71,7 @@ def estimate_dimension(epsilons, C):
     slope, inter = fit_line(X, Y)
     def poly(X):
         return slope*X + inter
-    
+
     # Generate log-log plot, saving as a file
     plt.plot(X, Y)           # Correlation Integrals
     plt.plot(X, poly(X))     # Fit line
