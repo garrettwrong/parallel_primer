@@ -58,8 +58,8 @@ double* generate_epsilons(double* D, int n){
   }
 
   /* compute a step size */
-  step = (maxD - minD) / (neps+1);
-  /* but skip the first, since it would be count of 0...*/
+  step = (maxD - minD) / (neps-1);
+  /* remember, we'll skip the first, since it would be count of 0...*/
   for(i=0; i<neps; i++){
     epsilons[i] = minD + step*(i+1);
   }
