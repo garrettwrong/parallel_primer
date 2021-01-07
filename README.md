@@ -10,7 +10,9 @@ Given a set of N points in R^d,
 
 3) Fit a line log-log scatter plot of counts vs epsilon. The slope of this line is the estimate of Correlation Dimension.
 
-Each implementation is located in it's own directory.  The serial version was prototyped in python.  The algorithm is split into two programs.  One which computes steps 1 and 2, then outputs a simple text file. The second program plots and line fits for us.
-
-Steps 1 and 2 were translated to C and extended to various implementations.
+Each implementation is located in it's own directory.
+The serial version was prototyped in Python.
+It is intentionally not optimized.
+This version was mostly translated to C, again not optimized.
+The C variant was then minimally adapted to other approaches.
 
