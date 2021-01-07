@@ -16,15 +16,18 @@ double* all_pairs_distances(double* X, int n, int d){
 
   double* D = (double*)calloc(n*n, sizeof(double));
 
-  /* There are several ways to do this with omp.
+  /* There are several ways to parallize this with omp.
      I have written it this way so you may easily remove
      some variables from the private list to generate
      a common error... try removing j, xj ...
 
      Also, while this section is O(N^2), it doesn't
-     yield a great speedup.  We need to
+     yield a great speedup alone.  We need to
      parallelize another quadratic section below.
-*/
+
+     There are more intermediate techniques, like
+     loop "collapsing" etc, but this is meant to be simple.
+  */
 #pragma omp parallel private(i, xi, j, xj, k)
 #pragma omp for reduction(+:tmp)
   for(i=0; i<n; i++){
