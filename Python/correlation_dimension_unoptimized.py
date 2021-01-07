@@ -11,14 +11,13 @@ output_fname = os.path.join(dirp, 'correlation_integrals.dat')
 def all_pairs_distances(X):
     n = len(X)
     D = np.zeros((n,n), dtype=np.float64)
-    if X.ndim == 1:
-        X = X[:, np.newaxis]
 
     # Compute pair wise distances.
     #   Yes, this is intentionally not optimized much... it is an example for non programmers.
     #   For those inclined, you can easily rewrite this as array opts and only compute upper/lower triangle.
     for i, xi in enumerate(X):
-        D[i, :] = np.sqrt(np.sum(np.square(xi - X), axis=-1))
+        for j, xj in enumerate(X):
+            D[i, j] = np.linalg.norm(xi - xj)
 
     return D
 
@@ -36,7 +35,12 @@ def correlation_integrals(D, epsilons=None, fname=output_fname):
     C = np.zeros(len(epsilons), dtype=np.int)
 
     for i, epsilon in enumerate(epsilons):
-        C[i] = np.sum(D<epsilon)
+        cnt = 0
+        for row in D:
+            for d in row:
+                if d < epsilon:
+                    cnt += 1
+        C[i] = cnt
 
     # Optionally Write out to a text file
     if fname is not None:

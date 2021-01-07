@@ -12,7 +12,8 @@ Given a set of N points in R^d,
 
 Each implementation is located in it's own directory.
 The serial version was prototyped in Python.
-It is intentionally not optimized.
+It is intentionally not optimized beyond using numpy.
+There is _unoptimized python version that uses native python loops (about 100x slower)
 This version was mostly translated to C, again not optimized.
 The C variant was then minimally adapted to other approaches.
 
