@@ -16,6 +16,15 @@ double* all_pairs_distances(double* X, int n, int d){
 
   double* D = (double*)calloc(n*n, sizeof(double));
 
+  /* There are several ways to do this with omp.
+     I have written it this way so you may easily remove
+     some variables from the private list to generate
+     a common error... try removing j, xj ...
+
+     Also, while this section is O(N^2), it doesn't
+     yield a great speedup.  We need to
+     parallelize another quadratic section below.
+*/
 #pragma omp parallel private(i, xi, j, xj, k)
 #pragma omp for reduction(+:tmp)
   for(i=0; i<n; i++){
@@ -33,7 +42,7 @@ double* all_pairs_distances(double* X, int n, int d){
       D[i*n + j] = sqrtf(tmp);
     }
   }
-  
+
   return D;
 }
 
@@ -80,6 +89,10 @@ int* correlation_integrals(double* D, int n, double* epsilons){
 
   int* C = (int*)calloc(neps, sizeof(int));
 
+  /* This section makes better use of shared data,
+   and yields a much more dramatic speed increase.*/
+#pragma omp parallel private(i)
+#pragma omp for reduction(+:cnt)
   for(i=0; i<neps; i++){
     cnt = 0;
     eps = epsilons[i];
