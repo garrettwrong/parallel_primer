@@ -168,7 +168,7 @@ double estimate_dimension(double* epsilons, int* C){
 int main(int argc, char** argv){
   double* D;
   double* epsilons;
-  int bufC[neps+32];
+  int* bufC;
   int* C;
 
 
@@ -177,7 +177,7 @@ int main(int argc, char** argv){
   MPI_Init (&argc, &argv);
   MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
   MPI_Comm_rank (MPI_COMM_WORLD, &mpi_pid);
-
+  bufC = (int*)calloc(neps+numprocs-1, sizeof(int));
 
   /* monthly_sunspots and monthly_sunspots_n are provided by the pre baked header at TOF. */
 
@@ -185,8 +185,9 @@ int main(int argc, char** argv){
   D = all_pairs_distances(monthly_sunspots, monthly_sunspots_n, 1, mpi_pid, numprocs);
 
   /* Then we'll share the results for each piece of D. */
-  nelem = (monthly_sunspots_n*monthly_sunspots_n + numprocs - 1) / numprocs;
-  MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, D, nelem, MPI_DOUBLE, MPI_COMM_WORLD);
+  nelem = (monthly_sunspots_n + numprocs - 1) / numprocs;
+  MPI_Allgather(MPI_IN_PLACE, 0, MPI_DATATYPE_NULL, D,
+		nelem*monthly_sunspots_n, MPI_DOUBLE, MPI_COMM_WORLD);
 
   /* This is function is cheap, all processes can do it;
      not worth additional code for abroadcast. */
@@ -213,6 +214,7 @@ int main(int argc, char** argv){
   free(D);
   free(epsilons);
   free(C);
+  free(bufC);
 
   /* MPI shutdown */
   MPI_Finalize();
