@@ -1,10 +1,11 @@
 CC=gcc
-CFLAGS=-O2 -Wall -lm -I../input_data
+OMP_FLAGS=-fopenmp
+CFLAGS=-O2 -Wall -lm $(OMP_FLAGS) -I../input_data
 
-correlation_dimension.x: correlation_dimension.c
+correlation_dimension_omp.x: correlation_dimension_omp.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm correlation_dimension.x
+	rm -f correlation_dimension_omp.x
 
 .PHONY: clean

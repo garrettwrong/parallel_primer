@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <omp.h>
 
 const int numstep=100;
 const int neps=numstep-1;
@@ -15,11 +16,13 @@ double* all_pairs_distances(double* X, int n, int d){
 
   double* D = (double*)calloc(n*n, sizeof(double));
 
+#pragma omp parallel private(i, xi, j, xj, k)
+#pragma omp for reduction(+:tmp)
   for(i=0; i<n; i++){
     for(j=0; j<n; j++){
       /* compute norm in dim d,
 	 this is sort of stupid for d=1, alas.
-       */
+      */
       tmp = 0;
       for(k=0; k<d; k++){
 	xi = X[d*i + k];
@@ -30,7 +33,7 @@ double* all_pairs_distances(double* X, int n, int d){
       D[i*n + j] = sqrtf(tmp);
     }
   }
-
+  
   return D;
 }
 

@@ -5,6 +5,6 @@ correlation_dimension.x: correlation_dimension.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-	rm correlation_dimension.x
+	rm -f correlation_dimension.x
 
 .PHONY: clean
