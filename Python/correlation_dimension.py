@@ -5,6 +5,9 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
+dirp = os.path.dirname(os.path.realpath(__file__))
+output_fname = os.path.join(dirp, 'correlation_integrals.dat')
+
 def all_pairs_distances(X):
     n = len(X)
     D = np.zeros((n,n), dtype=np.float64)
@@ -18,7 +21,7 @@ def all_pairs_distances(X):
 
     return D
 
-def correlation_integrals(D, epsilons=None, fname='correlation_integrals.dat'):
+def correlation_integrals(D, epsilons=None, fname=output_fname):
 
     if epsilons is None:
         # Lets generate a reasonable epsilon range.
@@ -75,7 +78,7 @@ def estimate_dimension(epsilons, C):
     # Generate log-log plot, saving as a file
     plt.plot(X, Y)           # Correlation Integrals
     plt.plot(X, poly(X))     # Fit line
-    plt.savefig('correlation_dimension.png')
+    plt.savefig(os.path.join(dirp, 'correlation_dimension.png'))
     return slope
 
 
@@ -110,7 +113,6 @@ def correlation_dimension(X):
 if __name__ == "__main__":
 
     # Load some example data
-    dirp = os.path.dirname(os.path.realpath(__file__))
     with open(os.path.join(dirp, '../input_data/monthly-sunspots.csv'), 'r') as fh:
         lines = fh.readlines()
 
