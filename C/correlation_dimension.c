@@ -61,13 +61,14 @@ double* generate_epsilons(double* D, int n){
   /* compute a step size */
   step = (maxD - minD) / neps;
   /* printf("step %f\n", step); */
-  /* remember, we'll skip the first, since it would be count of 0...*/
+  /* remember, we'll skip the first step, so (i+1), since it would be count of 0...*/
   for(i=0; i<neps; i++){
     epsilons[i] = minD + step*(i+1);
   }
 
   return epsilons;
 }
+
 
 int* correlation_integrals(double* D, int n, double* epsilons){
 
@@ -89,6 +90,7 @@ int* correlation_integrals(double* D, int n, double* epsilons){
 
   return C;
 }
+
 
 void write_file(double* epsilons, int* C){
   int n;
