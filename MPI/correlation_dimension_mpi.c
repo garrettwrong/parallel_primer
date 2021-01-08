@@ -46,7 +46,7 @@ double* all_pairs_distances(double* X, int n, int d, int pid, int numprocs){
 
 
 double* generate_epsilons(double* D, int n){
-  int i;
+  int i, j;
   double minD, maxD, val;
   double step;
 
@@ -54,17 +54,23 @@ double* generate_epsilons(double* D, int n){
   double* epsilons = (double*)calloc(neps, sizeof(double));
 
   /* compute min max of D*/
-  minD = D[0];
-  maxD = D[0];
-  for(i=1; i<n*n; i++){
-    val = D[i];
+  /* We expect non diagonal elements to be non zero,
+     though this is not "robust".
+     We'll also use the symmetry here.
+  */
+  minD = D[1];
+  maxD = D[1];
+  for(i=0; i<n; i++){
+    for(j=0; j<i; j++){
+      val = D[i*n +j];
 
-    if(val < minD){
-      minD = val;
-    }
+      if(val < minD){
+	minD = val;
+      }
 
-    if(val > maxD){
-      maxD = val;
+      if(val > maxD){
+	maxD = val;
+      }
     }
   }
 
