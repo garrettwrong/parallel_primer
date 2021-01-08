@@ -26,7 +26,7 @@ def correlation_integrals(D, epsilons=None, fname=output_fname):
 
     if epsilons is None:
         # Lets generate a reasonable epsilon range.
-        minD = np.min(D)
+        minD = np.min(D[~np.eye(D.shape[0], dtype=np.bool)])
         maxD = np.max(D)
         # Just ignore minD, for log(0) reasons
         epsilons, step = np.linspace(minD, maxD, num=100, retstep=True)
