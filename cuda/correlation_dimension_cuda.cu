@@ -54,16 +54,27 @@ double* all_pairs_distances(double* X, int n, int d){
 
 __global__ void min_max_kernel(double* D, int n, double* buf){
   int i;
+  double minD, maxD, val;
+
   const int tidx = blockDim.x * blockIdx.x + threadIdx.x;
   if(tidx >= n){
     return;
   }
 
-  double minD, maxD, val;
-  minD = D[0];
-  maxD = D[0];
+  /* compute min max of D*/
+  /* We expect non diagonal elements to be non zero,
+     though this is not "robust".
+     I think using symmetry here would actually hurt performance...
+     do you know why?
+  */
+  minD = D[1];
+  maxD = D[1];
 
   for(i=0; i<n; i++){
+    /* skip diagonals */
+    if(tidx == i){
+      continue;
+    }
     val = D[i*n + tidx];
 
     if(val<minD){
