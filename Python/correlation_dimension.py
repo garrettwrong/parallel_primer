@@ -31,7 +31,7 @@ def correlation_integrals(D, epsilons=None, fname=output_fname):
         # Just ignore minD, for log(0) reasons
         epsilons, step = np.linspace(minD, maxD, num=100, retstep=True)
         epsilons = epsilons[1:]
-        # print("step", step)
+        # print("minD", minD, "maxD", maxD, "step", step)
 
     C = np.zeros(len(epsilons), dtype=np.int)
 
