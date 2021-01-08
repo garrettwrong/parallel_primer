@@ -10,6 +10,9 @@ const int neps=numstep-1;
    If using the provided Makefile from this directory, it should be found. */
 #include "monthly_sunspots_data.h"
 
+/* a larger data set */
+/* #include "random_2d_data.h" */
+
 double* all_pairs_distances(double* X, int n, int d, int pid, int numprocs){
   int i, j, k;
   double xi, xj, tmp;
@@ -188,7 +191,7 @@ int main(int argc, char** argv){
   /* input_data and input_data_n are provided by the pre baked header at TOF. */
 
   /* Each process will do roughly 1/numprocs of the computation D. */
-  D = all_pairs_distances(input_data, input_data_n, 1, mpi_pid, numprocs);
+  D = all_pairs_distances(input_data, input_data_n, input_data_dim, mpi_pid, numprocs);
 
   /* Then we'll share the results for each piece of D. */
   nelem = (input_data_n + numprocs - 1) / numprocs;

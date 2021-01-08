@@ -9,6 +9,9 @@ const int neps=numstep-1;
    If using the provided Makefile from this directory, it should be found. */
 #include "monthly_sunspots_data.h"
 
+/* a larger data set */
+/* #include "random_2d_data.h" */
+
 __global__ void all_pairs_distances_kernel(double* X, int n, int d, double* D){
   int i, k;
   double xi, xj, tmp;
@@ -41,8 +44,8 @@ double* all_pairs_distances(double* X, int n, int d){
   cudaMalloc(&D, n * n * sizeof(double));
 
   double* X_dev;
-  cudaMalloc(&X_dev, n * sizeof(double));
-  cudaMemcpy(X_dev, X, n * sizeof(double), cudaMemcpyHostToDevice);
+  cudaMalloc(&X_dev, n * d * sizeof(double));
+  cudaMemcpy(X_dev, X, n * d * sizeof(double), cudaMemcpyHostToDevice);
 
   int blocksz = 1024;
   int nblocks = (n + blocksz -1 ) / blocksz;
@@ -282,7 +285,7 @@ int main(int argc, char** argv){
   int* C;
 
   /* input_data and input_data_n are provided by the pre baked header at TOF. */
-  D_dev = all_pairs_distances(input_data, input_data_n, 1);
+  D_dev = all_pairs_distances(input_data, input_data_n, input_data_dim);
 
   epsilons_dev = generate_epsilons(D_dev, input_data_n);
 

@@ -120,4 +120,7 @@ if __name__ == "__main__":
     # Take second column, make into an array, skipping header
     X = np.array([l.strip().split(',')[1] for l in lines[1:]], dtype=np.float64)
 
+    # # Or load a larger example data
+    # X = np.load(os.path.join(dirp, '../input_data/random_2d_data.npy'))
+
     print('Estimated Correlation Dimension: %f' % correlation_dimension(X))

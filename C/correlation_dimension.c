@@ -9,6 +9,9 @@ const int neps=numstep-1;
    If using the provided Makefile from this directory, it should be found. */
 #include "monthly_sunspots_data.h"
 
+/* a larger data set */
+/* #include "random_2d_data.h" */
+
 double* all_pairs_distances(double* X, int n, int d){
   int i, j, k;
   double xi, xj, tmp;
@@ -160,7 +163,7 @@ int main(int argc, char** argv){
   int* C;
 
   /* input_data and input_data_n are provided by the pre baked header at TOF. */
-  D = all_pairs_distances(input_data, input_data_n, 1);
+  D = all_pairs_distances(input_data, input_data_n, input_data_dim);
 
   epsilons = generate_epsilons(D, input_data_n);
 
