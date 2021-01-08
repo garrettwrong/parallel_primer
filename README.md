@@ -1,19 +1,42 @@
-For our example program we will compute "Correlation Dimension".  This implementation is trivially O(N^2) steps and easily subdivided in various ways.  Fractional dimension measure is sort of a fun idea.  It is a cute stepping stone into more formal non linear time series analysis. Something we can understand and code in a few minutes...
+# Parallel Programming Primer Examples
 
-The high level steps to the algorithm:
+## About
+
+For these example programs we will compute "Correlation Dimension".  This implementation is trivially O(N^2) steps and easily subdivided in various ways.  Fractional dimension measure is sort of a fun idea.  It is a cute stepping stone into more formal non linear time series analysis. Something we can understand and code in a few minutes... mostly.
+
+The high level steps to the algorithm are simple:
 
 Given a set of N points in R^d,
 
-1) Compute all pairs of distances between two points n_i, n_j.  We will use Euclidean distance for dimension d (l2 norm).
+1) Compute all pairs of distances D between two points n_i, n_j.  We will use Euclidean distance for appropriate input data dimension (l2 norm).
 
-2) For a range of epsilons, count how many distances are less than epsilon.
+2) For a range of epsilons, we count how many distances in D are less than each epsilon.
 
-3) Fit a line log-log scatter plot of counts vs epsilon. The slope of this line is the estimate of Correlation Dimension.
+3) Fit a line to the log-log scatter plot of counts vs epsilon. The slope of this line is the estimate of Correlation Dimension.
+
+
+## Navigating this Repo
 
 Each implementation is located in it's own directory.
 The serial version was prototyped in Python.
 It is intentionally not optimized beyond using numpy.
-There is _unoptimized python version that uses native python loops (about 100x slower)
-This version was mostly translated to C, again not optimized.
+There is _unoptimized python version that uses native python loops (and is about 100x slower, yikes).
+This version was mostly translated to C, again not optimized, just a basic port.
 The C variant was then minimally adapted to other approaches.
 
+Currently:
+
+* Python
+* OpenMP (gomp)
+* MPI (OpenMPI)
+* CUDA
+* CUPY
+
+## License
+
+Released as GPLv3.
+
+This code was written as supporting material for a short Parallel Computing Primer workshop,
+as part of the larger "Winter Break 2021 Research Computing Bootcamp".
+
+Copyright Garrett Wright 2021.
