@@ -1,5 +1,7 @@
 const int input_data_n = 2820;
 
+const int input_data_dim = 1;
+
 double input_data[2820] = {
 	58.0,
 	62.6,
