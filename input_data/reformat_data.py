@@ -13,8 +13,8 @@ n = len(lines)
 
 with open('monthly_sunspots_data.h', 'w') as fh:
 
-    fh.write('const int monthly_sunspots_n = %d;\n\n' % n)
-    fh.write('double monthly_sunspots[%d] = {\n' % n)
+    fh.write('const int input_data_n = %d;\n\n' % n)
+    fh.write('double input_data[%d] = {\n' % n)
     
     for i, line in enumerate(lines):
         s = '\t' + line.strip().split(',')[1]

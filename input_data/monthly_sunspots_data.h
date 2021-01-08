@@ -1,6 +1,6 @@
-const int monthly_sunspots_n = 2820;
+const int input_data_n = 2820;
 
-double monthly_sunspots[2820] = {
+double input_data[2820] = {
 	58.0,
 	62.6,
 	70.0,

@@ -281,12 +281,12 @@ int main(int argc, char** argv){
   double* epsilons_dev;
   int* C;
 
-  /* monthly_sunspots and monthly_sunspots_n are provided by the pre baked header at TOF. */
-  D_dev = all_pairs_distances(monthly_sunspots, monthly_sunspots_n, 1);
+  /* input_data and input_data_n are provided by the pre baked header at TOF. */
+  D_dev = all_pairs_distances(input_data, input_data_n, 1);
 
-  epsilons_dev = generate_epsilons(D_dev, monthly_sunspots_n);
+  epsilons_dev = generate_epsilons(D_dev, input_data_n);
 
-  C = correlation_integrals(D_dev, monthly_sunspots_n, epsilons_dev);
+  C = correlation_integrals(D_dev, input_data_n, epsilons_dev);
 
   printf("Estimated Correlation Dimension: %f\n",
 	 estimate_dimension(epsilons_dev, C));
