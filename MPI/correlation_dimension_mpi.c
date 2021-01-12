@@ -13,22 +13,29 @@ const int neps=numstep-1;
 /* a larger data set */
 /* #include "random_2d_data.h" */
 
-double* all_pairs_distances(double* X, int n, int d, int pid, int numprocs){
+double* all_pairs_distances(double* X, int n, int d){
   int i, j, k;
   double xi, xj, tmp;
   int nelem, ubnd;
 
+  /* MPI setup*/
+  int mpi_pid=0;
+  int numprocs=1;
+  MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
+  MPI_Comm_rank (MPI_COMM_WORLD, &mpi_pid);
+
+  
   /* Note we'll "cheat" and make this a little larger to avoid boundary issues.
      This is fine so long as we ignore pad values in our loops.*/
   nelem = (n + numprocs - 1) / numprocs;
   double* D = (double*)calloc(n*n + numprocs - 1, sizeof(double));
-  ubnd = nelem*(pid+1);
+  ubnd = nelem*(mpi_pid+1);
   if(n < ubnd){
     ubnd = n;
   }
   /* an alternative to this would be to use strides of numprocs.. */
 
-  for(i=nelem*pid; i<ubnd; i++){
+  for(i=nelem*mpi_pid; i<ubnd; i++){
     for(j=0; j<n; j++){
       /* compute norm in dim d,
 	 this is sort of stupid for d=1, alas.
@@ -89,21 +96,27 @@ double* generate_epsilons(double* D, int n){
 }
 
 
-int* correlation_integrals(double* D, int n, double* epsilons, int pid, int numprocs){
+int* correlation_integrals(double* D, int n, double* epsilons){
 
   int i, m, cnt;
   double eps;
   int nelem, ubnd;
 
+  /* MPI setup*/
+  int mpi_pid=0;
+  int numprocs=1;
+  MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
+  MPI_Comm_rank (MPI_COMM_WORLD, &mpi_pid);
+  
   int* C = (int*)calloc(neps + numprocs - 1, sizeof(int));
 
   nelem = (neps + numprocs - 1) / numprocs;
-  ubnd = (pid+1)*nelem;
+  ubnd = (mpi_pid+1)*nelem;
   if(neps<ubnd){
     ubnd = neps;
   }
 
-  for(i=pid*nelem; i<ubnd; i++){
+  for(i=mpi_pid*nelem; i<ubnd; i++){
     cnt = 0;
     eps = epsilons[i];
     /* loop through D, counting if closer than eps */
@@ -180,18 +193,23 @@ int main(int argc, char** argv){
   int* bufC;
   int* C;
 
-
+  /*
+    Note that it is pretty common for folks to use #ifdef
+    to switch MPI code in an out, but this complicates things,
+    perhaps too much for a basic example.
+  */
+  
   /* MPI Initialization */
   int mpi_pid, numprocs, nelem;
-  MPI_Init (&argc, &argv);
-  MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
-  MPI_Comm_rank (MPI_COMM_WORLD, &mpi_pid);
+  MPI_Init(&argc, &argv);
+  MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
+  MPI_Comm_rank(MPI_COMM_WORLD, &mpi_pid);
   bufC = (int*)calloc(neps+numprocs-1, sizeof(int));
 
   /* input_data and input_data_n are provided by the pre baked header at TOF. */
 
   /* Each process will do roughly 1/numprocs of the computation D. */
-  D = all_pairs_distances(input_data, input_data_n, input_data_dim, mpi_pid, numprocs);
+  D = all_pairs_distances(input_data, input_data_n, input_data_dim);
 
   /* Then we'll share the results for each piece of D. */
   nelem = (input_data_n + numprocs - 1) / numprocs;
@@ -199,11 +217,11 @@ int main(int argc, char** argv){
 		nelem*input_data_n, MPI_DOUBLE, MPI_COMM_WORLD);
 
   /* This is function is cheap, all processes can do it;
-     not worth additional code for abroadcast. */
+     not worth additional code for a broadcast. */
   epsilons = generate_epsilons(D, input_data_n);
 
   /* Each process will do roughly 1/numprocs computation of C. */
-  C = correlation_integrals(D, input_data_n, epsilons, mpi_pid, numprocs);
+  C = correlation_integrals(D, input_data_n, epsilons);
 
   /* Then we'll gather the results for C on mpi_pid=0 */
   nelem = (neps + numprocs - 1) / numprocs;
