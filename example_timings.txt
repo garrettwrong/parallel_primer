@@ -1,0 +1,21 @@
+Time in seconds. Intel 2700K, Kepler GPU (ancient, about to be deprecated)
+
+			Problem Sizes
+Implementation		2k		10k
+
+Native Python		126		1465
+Numpy Python		1.60		17
+C     			0.62		7.9
+OpenMP			0.21		3.5
+MPI			0.69		4.8
+CUDA			0.17		0.7
+CUPY			2.0		10.1
+C++ STL*		0.66 		8.20
+
+* I'm not a highly experienced C++ developer, novice/moderate.
+
+Note that I used "-o2" on purpose.
+Internally that is how most of the code backing Python is compiled.
+It is also a common default.
+If using more advanced optimization C, C++, and CUDA pull away even farther.
+Approximately another 10-20% or so on my machine.
