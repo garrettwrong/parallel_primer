@@ -52,10 +52,14 @@ def correlation_integrals(D, epsilons=None, fname=output_fname):
     return epsilons, C
 
 
-def fit_line(X, Y):
+def fit_line(X, Y, truncate=0.5):
 
-    n = len(X)
-    assert n == len(Y)
+    # Since we don't have enough data to support
+    #   fitting the tail of this line, truncate it.
+    n = int(truncate*len(X))
+    X = X[:n]
+    Y = Y[:n]
+
     xhat = np.sum(X) / n
     yhat = np.sum(Y) / n
     # print("xhat, yhat, n", xhat, yhat, n)

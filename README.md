@@ -10,9 +10,11 @@ Given a set of N points in R^d,
 
 1) Compute all pairs of distances D between two points n_i, n_j.  We will use Euclidean distance for appropriate input data dimension (l2 norm).
 
-2) For a range of epsilons, we count how many distances in D are less than each epsilon.
+2) For a range of epsilons, we count how many distances in D are less than each epsilon. This is usually called the "correlation sum", up to normalization constants.
 
 3) Fit a line to the log-log scatter plot of counts vs epsilon. The slope of this line is the estimate of Correlation Dimension.
+
+Because we don't have infinite points, the line is only an estimate; fitting it requires interpretation. For this toy example, we'll simply truncate the tail effect before fitting.  The python code should generate a plot saved as png if you are curious.
 
 
 ## Navigating this Repo
@@ -37,6 +39,6 @@ Currently:
 Released as GPLv3.
 
 This code was written as supporting material for a short Parallel Computing Primer workshop,
-as part of the larger "Winter Break 2021 Research Computing Bootcamp".
+as part Princeton University's larger "Winter Break 2021 Research Computing Bootcamp".
 
 Copyright Garrett Wright 2021.

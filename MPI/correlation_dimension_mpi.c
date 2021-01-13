@@ -24,7 +24,7 @@ double* all_pairs_distances(double* X, int n, int d){
   MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
   MPI_Comm_rank (MPI_COMM_WORLD, &mpi_pid);
 
-  
+
   /* Note we'll "cheat" and make this a little larger to avoid boundary issues.
      This is fine so long as we ignore pad values in our loops.*/
   nelem = (n + numprocs - 1) / numprocs;
@@ -107,7 +107,7 @@ int* correlation_integrals(double* D, int n, double* epsilons){
   int numprocs=1;
   MPI_Comm_size (MPI_COMM_WORLD, &numprocs);
   MPI_Comm_rank (MPI_COMM_WORLD, &mpi_pid);
-  
+
   int* C = (int*)calloc(neps + numprocs - 1, sizeof(int));
 
   nelem = (neps + numprocs - 1) / numprocs;
@@ -154,10 +154,13 @@ double estimate_dimension(double* epsilons, int* C){
 
   write_file(epsilons, C);
 
+  /* Since we don't have a real limit situation here,
+     we'll truncate the tail of this dataset. */
+  int n = (int)(0.5*neps);
+
   xhat = 0.;
   yhat = 0.;
-
-  for(i=0; i<neps; i++){
+  for(i=0; i<n; i++){
     X[i] = logf(epsilons[i]);
     Y[i] = logf(C[i]);
 
@@ -165,19 +168,19 @@ double estimate_dimension(double* epsilons, int* C){
     yhat += Y[i];
   }
 
-  xhat /= neps;
-  yhat /= neps;
+  xhat /= n;
+  yhat /= n;
   /* printf("xhat yhat %f %f %d\n", xhat, yhat, neps); */
 
   num = 0.;
   den = 0.;
-  for(i=0; i<neps; i++){
+  for(i=0; i<n; i++){
     num += X[i] * Y[i];
     den += X[i] * X[i];
   }
 
-  num -= (neps) * xhat * yhat;
-  den -= (neps) * xhat * xhat;
+  num -= n * xhat * yhat;
+  den -= n * xhat * xhat;
 
   slope = num / den;
   /*inter = yhat - slope * xhat; */
@@ -198,7 +201,7 @@ int main(int argc, char** argv){
     to switch MPI code in an out, but this complicates things,
     perhaps too much for a basic example.
   */
-  
+
   /* MPI Initialization */
   int mpi_pid, numprocs, nelem;
   MPI_Init(&argc, &argv);

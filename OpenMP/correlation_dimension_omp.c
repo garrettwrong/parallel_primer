@@ -68,7 +68,7 @@ double* generate_epsilons(double* D, int n){
   */
   minD = D[1];
   maxD = D[1];
-#pragma omp parallel for private(i, j, val)
+#pragma omp parallel for private(i, j, val) reduction(min:minD) reduction(max:maxD)
   for(i=0; i<n; i++){
     for(j=0; j<i; j++){
       val = D[i*n + j];
@@ -144,10 +144,13 @@ double estimate_dimension(double* epsilons, int* C){
 
   write_file(epsilons, C);
 
+  /* Since we don't have a real limit situation here,
+     we'll truncate the tail of this dataset. */
+  int n = (int)(0.5*neps);
+
   xhat = 0.;
   yhat = 0.;
-
-  for(i=0; i<neps; i++){
+  for(i=0; i<n; i++){
     X[i] = logf(epsilons[i]);
     Y[i] = logf(C[i]);
 
@@ -155,19 +158,19 @@ double estimate_dimension(double* epsilons, int* C){
     yhat += Y[i];
   }
 
-  xhat /= neps;
-  yhat /= neps;
-  /* printf("xhat yhat %f %f %d\n", xhat, yhat, neps); */
+  xhat /= n;
+  yhat /= n;
+  /* printf("xhat yhat %f %f %d\n", xhat, yhat, n); */
 
   num = 0.;
   den = 0.;
-  for(i=0; i<neps; i++){
+  for(i=0; i<n; i++){
     num += X[i] * Y[i];
     den += X[i] * X[i];
   }
 
-  num -= (neps) * xhat * yhat;
-  den -= (neps) * xhat * xhat;
+  num -= (n) * xhat * yhat;
+  den -= (n) * xhat * xhat;
 
   slope = num / den;
   /*inter = yhat - slope * xhat; */
