@@ -14,8 +14,14 @@ Given a set of N points in R^d,
 
 3) Fit a line to the log-log scatter plot of counts vs epsilon. The slope of this line is the estimate of Correlation Dimension.
 
-Because we don't have infinite points, the line is only an estimate; fitting it requires interpretation. For this toy example, we'll simply truncate the tail effect before fitting.  The python code should generate a plot saved as png if you are curious.
+Because we don't have infinite points, the line is only an estimate;
+fitting it requires interpretation.
+For this toy example, we'll simply truncate the tail effect before fitting.
+The python code should generate a plot saved as png if you are curious.
 
+This is not how it is done in practice,
+but seems to make an example that is
+a little more intersting than dot product.
 
 ## Navigating this Repo
 
@@ -33,6 +39,12 @@ Currently:
 * MPI (OpenMPI)
 * CUDA
 * CUPY
+
+There is an example environment that I have used on TigerCPU and TigerGPU.
+I'd encourage you to look at the contents before sourcing.  You may prefer
+or require something different.
+
+`source tiger.environ`
 
 ## License
 

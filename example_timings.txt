@@ -7,7 +7,7 @@ Native Python		126		1465
 Numpy Python		1.60		17
 C     			0.62		7.9
 OpenMP			0.21		3.5
-MPI			0.69		4.8
+MPI			0.61		4.1
 CUDA			0.17		0.7
 CUPY			2.0		10.1
 C++ STL*		0.66 		8.20

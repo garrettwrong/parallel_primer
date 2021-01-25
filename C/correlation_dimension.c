@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-const int numstep=100;
-const int neps=numstep-1;
+const int neps=99;
 
 /* This preprocessed file is located in 'input_data' from the git root.
    If using the provided Makefile from this directory, it should be found. */
@@ -69,7 +68,8 @@ double* generate_epsilons(double* D, int n){
 
   /* compute a step size */
   step = (maxD - minD) / neps;
-  /* printf("step %f\n", step); */
+  printf("local min max %f %f\n", minD, maxD);
+  printf("step %f\n", step);
   /* remember, we'll skip the first step, so (i+1), since it would be count of 0...*/
   for(i=0; i<neps; i++){
     epsilons[i] = minD + step*(i+1);
@@ -116,8 +116,8 @@ void write_file(double* epsilons, int* C){
 
 double estimate_dimension(double* epsilons, int* C){
   int i;
-  double X[neps];
-  double Y[neps];
+  double* X = (double*)calloc(neps, sizeof(double));
+  double* Y = (double*)calloc(neps, sizeof(double));
   double xhat, yhat, num, den;
   double slope;
   /* double inter; */
@@ -154,6 +154,9 @@ double estimate_dimension(double* epsilons, int* C){
 
   slope = num / den;
   /*inter = yhat - slope * xhat; */
+
+  free(X);
+  free(Y);
 
   return slope;
 
