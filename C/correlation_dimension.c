@@ -69,7 +69,8 @@ double* generate_epsilons(double* D, int n){
 
   /* compute a step size */
   step = (maxD - minD) / neps;
-  /* printf("step %f\n", step); */
+  printf("local min max %f %f\n", minD, maxD);
+  printf("step %f\n", step);
   /* remember, we'll skip the first step, so (i+1), since it would be count of 0...*/
   for(i=0; i<neps; i++){
     epsilons[i] = minD + step*(i+1);
@@ -116,8 +117,8 @@ void write_file(double* epsilons, int* C){
 
 double estimate_dimension(double* epsilons, int* C){
   int i;
-  double X[neps];
-  double Y[neps];
+  double* X = (double*)calloc(neps, sizeof(double));
+  double* Y = (double*)calloc(neps, sizeof(double));
   double xhat, yhat, num, den;
   double slope;
   /* double inter; */
@@ -154,6 +155,9 @@ double estimate_dimension(double* epsilons, int* C){
 
   slope = num / den;
   /*inter = yhat - slope * xhat; */
+
+  free(X);
+  free(Y);
 
   return slope;
 

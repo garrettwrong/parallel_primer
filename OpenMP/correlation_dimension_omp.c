@@ -136,8 +136,8 @@ void write_file(double* epsilons, int* C){
 
 double estimate_dimension(double* epsilons, int* C){
   int i;
-  double X[neps];
-  double Y[neps];
+  double* X = (double*)calloc(neps, sizeof(double));
+  double* Y = (double*)calloc(neps, sizeof(double));
   double xhat, yhat, num, den;
   double slope;
   /* double inter; */
@@ -174,6 +174,9 @@ double estimate_dimension(double* epsilons, int* C){
 
   slope = num / den;
   /*inter = yhat - slope * xhat; */
+
+  free(X);
+  free(Y);
 
   return slope;
 

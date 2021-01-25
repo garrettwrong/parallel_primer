@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-O2 -Wall -lm -I../input_data
+CFLAGS=-std=c99 -O2 -Wall -lm -I../input_data
 
 correlation_dimension.x: correlation_dimension.c
 	$(CC) $(CFLAGS) -o $@ $<
