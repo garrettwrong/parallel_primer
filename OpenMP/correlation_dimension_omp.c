@@ -3,8 +3,7 @@
 #include <math.h>
 #include <omp.h>
 
-const int numstep=100;
-const int neps=numstep-1;
+const int neps=99;
 
 /* This preprocessed file is located in 'input_data' from the git root.
    If using the provided Makefile from this directory, it should be found. */
