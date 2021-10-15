@@ -32,7 +32,7 @@ def correlation_integrals(D, epsilons=None, fname=output_fname):
         epsilons = epsilons[1:]
         # print("step", step)
 
-    C = np.zeros(len(epsilons), dtype=np.int)
+    C = np.zeros(len(epsilons), dtype=int)
 
     for i, epsilon in enumerate(epsilons):
         cnt = 0

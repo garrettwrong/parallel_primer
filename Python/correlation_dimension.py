@@ -26,14 +26,14 @@ def correlation_integrals(D, epsilons=None, fname=output_fname):
 
     if epsilons is None:
         # Lets generate a reasonable epsilon range.
-        minD = np.min(D[~np.eye(D.shape[0], dtype=np.bool)])
+        minD = np.min(D[~np.eye(D.shape[0], dtype=bool)])
         maxD = np.max(D)
         # Just ignore minD, for log(0) reasons
         epsilons, step = np.linspace(minD, maxD, num=100, retstep=True)
         epsilons = epsilons[1:]
         # print("minD", minD, "maxD", maxD, "step", step)
 
-    C = np.zeros(len(epsilons), dtype=np.int)
+    C = np.zeros(len(epsilons), dtype=int)
 
     for i, epsilon in enumerate(epsilons):
         C[i] = np.sum(D<epsilon)
