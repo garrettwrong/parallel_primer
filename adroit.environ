@@ -1,14 +1,11 @@
-# Load a recent compiler, required for recent cuda below
-module load rh/devtoolset/8
-
 # Load an MPI environment
-module load openmpi/gcc/3.1.5/64
+module load openmpi/gcc/4.1.0
 
 # Load cuda env
-module load cudatoolkit/10.2
+module load cudatoolkit/11.4
 
 # Load anaconda3 for python
-module load anaconda3
+module load anaconda3/2021.5
 
 # Depending what you have already setup in python you may need the following:
 #pip install numpy
